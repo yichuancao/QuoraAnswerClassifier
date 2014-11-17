@@ -98,65 +98,65 @@ for i in range(0, n):
     testingData[i].setFeatures(features)
 
 # Perceptron Learning Algorithm
-print "Done!" # 4-6s
+# TODO
 
-# --------------- worked KNN without Numpy, Sklearn (TOO SLOW) ----------------
-## distance
-#def euclideanDistance(training_instance, testing_instance):
-#    distance = 0.0
-#    for x in range(0, reduced_feature_dimension):
-#        distance = distance + (training_instance[x] - testing_instance[x])**2
-#    return math.sqrt(distance)
+# ------ working KNN without Numpy, Sklearn (Caveat: TOO SLOW on large input [40,000 training data]) ----------
+# distance
+def euclideanDistance(training_instance, testing_instance):
+    distance = 0.0
+    for x in range(0, reduced_feature_dimension):
+        distance = distance + (training_instance[x] - testing_instance[x])**2
+    return math.sqrt(distance)
 
-## find k neighbors
-#def getNeighbors(training_set, testing_instance, k):
-#    distances = []
-#    for x in range(0, N):
-#        dist = euclideanDistance(training_set[x].getFeatures(), testing_instance)
-#        distances.append((training_set[x], dist))
-#    distances.sort(key=operator.itemgetter(1))
-#    neighbors = []
-#    for x in range(k):
-#        neighbors.append(distances[x][0])
-#    return neighbors
+# find k neighbors
+def getNeighbors(training_set, testing_instance, k):
+    distances = []
+    for x in range(0, N):
+        dist = euclideanDistance(training_set[x].getFeatures(), testing_instance)
+        distances.append((training_set[x], dist))
+    distances.sort(key=operator.itemgetter(1))
+    neighbors = []
+    for x in range(k):
+        neighbors.append(distances[x][0])
+    return neighbors
 
-## set k
-#k = 5
+# set k
+k = 5
 
-## find prediction label
-#def majorityVote(neighbors):
-#    positive_count = 0
-#    negative_count = 0
-#    retVal = ''
-#    for i in range(k):
-#        if neighbors[i].getLabel() == '+1':
-#            positive_count += 1
-#        else:
-#            negative_count += 1
-#    if positive_count > negative_count:
-#        retVal = '+1'
-#    elif positive_count < negative_count:
-#        retVal = '-1'
-#    else:
-#        if p_count >= (N - p_count):
-#            retVal = '+1'
-#        else:
-#            retVal = '-1'
-#    return retVal
+# find prediction label
+def majorityVote(neighbors):
+    positive_count = 0
+    negative_count = 0
+    retVal = ''
+    for i in range(k):
+        if neighbors[i].getLabel() == '+1':
+            positive_count += 1
+        else:
+            negative_count += 1
+    if positive_count > negative_count:
+        retVal = '+1'
+    elif positive_count < negative_count:
+        retVal = '-1'
+    else:
+        if p_count >= (N - p_count):
+            retVal = '+1'
+        else:
+            retVal = '-1'
+    return retVal
 
-#def classify(training_set, testing_instance, k):
-#    neighbors = getNeighbors(training_set, testing_instance, k)
-#    prediction = majorityVote(neighbors)
-#    return prediction
+def classify(training_set, testing_instance, k):
+    neighbors = getNeighbors(training_set, testing_instance, k)
+    prediction = majorityVote(neighbors)
+    return prediction
 
-## Classification
-#for i in range(0, n):
-#    result = classify(trainingData, testingData[i].getFeatures(), k)
-#    print testingData[i].getAnsID(), result
+# Classification
+for i in range(0, n):
+    result = classify(trainingData, testingData[i].getFeatures(), k)
+    print testingData[i].getAnsID(), result
 
-# --------------------- worked KNN without Numpy, Sklearn (TOO SLOW) ----------------------
+# --------------------- working KNN without Numpy, Sklearn (TOO SLOW) ----------------------
 
-# --------------------- worked with sklearn --------------------
+# --------------------- working KNN with sklearn --------------------
 ## KNN with K = 15
 ## Normalizing features
 #X_train = []

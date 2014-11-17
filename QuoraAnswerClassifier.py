@@ -100,7 +100,7 @@ for i in range(0, n):
 # Perceptron Learning Algorithm
 # TODO
 
-# ------ working KNN without Numpy, Sklearn (Caveat: TOO SLOW on large input [40,000 training data]) ----------
+# ------ working KNN without Numpy, Sklearn (Caveat: TOO SLOW on large input [40,000+ training data points]) ----------
 # distance
 def euclideanDistance(training_instance, testing_instance):
     distance = 0.0

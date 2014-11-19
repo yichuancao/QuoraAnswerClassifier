@@ -31,7 +31,7 @@ train = data[1:N+1]
 n = int(data[N+1]) # n = number of testing data
 test = data[(N+2):]
 
-# dimension reduction (MANUALLY)
+# used for dimension reduction (MANUALLY)
 remove = {'1': True,
           '2': False,
           '3': True,
@@ -55,50 +55,59 @@ remove = {'1': True,
           '21': False, 
           '22': True, 
           '23': True}
+
+# data preprocessing (dimension reduction and normalization)
 p_count = 0
 trainingData = []
 testingData = []
 for k in range(N):
     features = []
+    sum = 0.0
+    list_data = train[k].split()
     for i in range(M):
-        leave_out = remove[train[k].split()[i + 2].split(':')[0]]
-        if leave_out == False:    
-            features.append(float(train[k].split()[i + 2].split(':')[1]))
-        reduced_feature_dimension = len(features)
-        t_label = train[k].split()[1]
-        if t_label == '+1':
-            p_count += 1
-    instance = Instance(train[k].split()[0], t_label, features)
+        list_feature = list_data[i + 2].split(':')
+        leave_out = remove[list_feature[0]]
+        if leave_out == False:
+            value = float(list_feature[1])    
+            features.append(value)
+            sum = float(sum) + value**2
+    features = [x / float(math.sqrt(sum)) for x in features]
+    reduced_feature_dimension = len(features)
+    t_label = list_data[1]
+    if t_label == '+1':
+        p_count += 1
+    instance = Instance(list_data[0], t_label, features)
     trainingData.append(instance)
 for k in range(n):
     features = []
+    sum = 0.0
+    list_data = test[k].split()
     for i in range(M):
-        leave_out = remove[test[k].split()[i + 1].split(':')[0]]
-        if leave_out == False:    
-            features.append(float(test[k].split()[i + 1].split(':')[1]))
-    instance = Instance(test[k].split()[0], '', features)
+        list_feature = list_data[i + 1].split(':')
+        leave_out = remove[list_feature[0]]
+        if leave_out == False:
+            value = float(list_feature[1])
+            features.append(value)
+            sum = float(sum) + value**2
+    features = [x / float(math.sqrt(sum)) for x in features]
+    instance = Instance(list_data[0], '', features)
     testingData.append(instance)
-
-# Normalization
-for i in range(0, N):
-    sum = 0.0
-    for j in range(0, reduced_feature_dimension):
-        sum = float(sum) + trainingData[i].getFeatures()[j]**2
-    features = []
-    for k in range(0, reduced_feature_dimension):
-        features.append(float(trainingData[i].getFeatures()[k]) / float(math.sqrt(sum)))
-    trainingData[i].setFeatures(features)
-for i in range(0, n):
-    sum = 0.0
-    for j in range(0, reduced_feature_dimension):
-        sum = float(sum) + testingData[i].getFeatures()[j]**2
-    features = []
-    for k in range(0, reduced_feature_dimension):
-        features.append(float(testingData[i].getFeatures()[k]) / float(math.sqrt(sum)))
-    testingData[i].setFeatures(features)
 
 # Perceptron Learning Algorithm
 # TODO
+
+# To be removed
+#import functools
+#print trainingData[0].getFeatures()
+#print train[0]
+#print re.findall(r':[0-9]*\.?[0-9]*', train[0])
+#list1 = [1, 2, 3]
+#list2 = [2.0, 3.0, 4.0]
+#print [x / 2.0 for x in list1]
+#multidiv = functools.partial(map, operator.div)
+#print multidiv(list1, list2)
+
+# normalization can be done with this without looping, may be faster
 
 # ------ working KNN without Numpy, Sklearn (Caveat: TOO SLOW on large input [40,000+ training data points]) ----------
 # distance

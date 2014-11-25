@@ -67,6 +67,8 @@ testingData = []
 for k in range(N):
     features = []
     #sum = 0.0
+    if random.uniform(0.0, 1.0) >= 0.1: # sample ~10% of training data
+        continue
     list_data = train[k].split()
     for i in range(M):
         list_feature = list_data[i + 2].split(':')
@@ -74,7 +76,7 @@ for k in range(N):
         if leave_out == False:
             value = float(list_feature[1])    
             features.append(value)
-            #sum = float(sum) + value**2
+    #        sum = float(sum) + value**2
     #features = [x / float(math.sqrt(sum)) for x in features]
     #reduced_feature_dimension = len(features)
     t_label = list_data[1]
@@ -97,7 +99,6 @@ for k in range(n):
     instance = Instance(list_data[0], '', features)
     testingData.append(instance)
 
-
 # Initialize random weights to start
 w = []
 reduced_dimension = len(trainingData[0].getFeatures())
@@ -109,20 +110,22 @@ for k in range(reduced_dimension):
 run = True
 while run == True:
     mistake = 0
-    for i in range(N):
+    for i in range(len(trainingData)):
         sum = 0.0
         for k in range(reduced_dimension):
             sum += w[k] * trainingData[i].getFeatures()[k]
         #print sum
         label = int(trainingData[i].getLabel())
+        #print sum, label
         if sum * label < 0:
             mistake += 1
             for j in range(reduced_dimension):
                 w[j] = w[j] + trainingData[i].getFeatures()[j] * label
-    #print i, N
+    #print i, len(trainingData)
     #print mistake
-    if i == N - 1 and mistake < N * (1.0 - 0.735): # STOP threshold (Not perfect. 0.735 came from playing with feature selection)
+    if i == len(trainingData) - 1 and mistake < len(trainingData) * (1.0 - 0.735): # STOP threshold (Not perfect. 0.735 came from playing with feature selection)
         run = False
+#print w
 
 # Classify
 for i in range(n):
